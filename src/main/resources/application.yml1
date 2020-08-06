@@ -1,0 +1,33 @@
+server:
+  port: 8761
+spring:
+  security:
+    user:
+      name: eureka  # 访问 Eureka Server 的用户名
+      password: eureka123456 # 访问 Eureka Server 的密码
+
+eureka:
+  instance:
+    ##超过多少时间没有收到心跳，就会将服务Instance删除，默认90s
+    ##172.31.0.243,172.31.0.244
+    hostname: localhost
+    lease-expiration-duration-in-seconds: 9
+    instance-id: ${spring.application.name}:${server.port}:${random.value}
+    metadata-map:
+      zone: hangzhou # 设置 zone
+    prefer-ip-address: true
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    region: huadong # 设置 region
+    availability-zones:
+      huadong: hangzhou # 设置可用 region-zone
+    serviceUrl:
+      hangzhou: http://${spring.security.user.name}:${spring.security.user.password}@localhost:8761/eureka/
+  server:
+    ##是否开启自我保护模式，默认为true
+    enableSelfPreservation: false
+    ##每隔多少时间更新一次缓存，默认为30 * 1000毫秒
+    response-cache-update-interval-ms: 3000
+    ##每隔多少时间检查一次心跳，单位为毫秒，默认为60 * 1000
+    eviction-interval-timer-in-ms: 6000
